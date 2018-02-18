@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Flask Plotlyjs Example</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+    <div id="line"></div>
+    <script>
+        Plotly.d3.json('/line', function(error, data){
+            if (error) return console.warn(error);
+
+            var layout = { margin: { t: 0 } }
+            var LINE = document.getElementById('line');
+            Plotly.plot(LINE, data)
+        })
+
+        function updatePlotly(newdata) {
+            var LINE = document.getElementById('line');
+            Plotly.restyle(LINE, 'x', [newdata])
+        }
+
+        function getData(dataset) {
+            console.log(dataset);
+            Plotly.d3.json(`/${dataset}`, function(error, data) {
+                updatePlotly(data);
+            });
+        }
+    </script>
+
+    <select id="selDataset" onchange="getData(this.value)">
+        <option value="dataset1">DataSet1</option>
+        <option value="dataset2">DataSet2</option>
+        <option value="dataset3">DataSet3</option>
+    </select>
+</body>
+</html>
